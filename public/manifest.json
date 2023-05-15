@@ -1,0 +1,10 @@
+{
+  "short_name": "GitHub User Search",
+  "name": "GitHub User Search",
+  "description": "A web app to search for a GitHub user using their username.",
+  "icons": [],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#000000",
+  "background_color": "#ffffff"
+}
