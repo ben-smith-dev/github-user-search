@@ -1,3 +1,6 @@
+import React from 'react';
+import styles from './SearchForm.module.css';
+
 export interface SearchFormProps {
   onSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
   searchRef: React.MutableRefObject<HTMLInputElement | null>;
@@ -10,7 +13,7 @@ const SearchForm: React.FC<SearchFormProps> = ({
   searchPreviewText,
 }) => {
   return (
-    <form onSubmit={onSubmit}>
+    <form onSubmit={onSubmit} className={styles.searchContainer}>
       <input
         type="search"
         id="searchInput"
@@ -18,9 +21,12 @@ const SearchForm: React.FC<SearchFormProps> = ({
         autoCorrect="off"
         ref={searchRef}
         placeholder={searchPreviewText}
+        className={styles.searchInput}
       />
 
-      <button type="submit">Search</button>
+      <button type="submit" className={styles.searchButton}>
+        Search
+      </button>
     </form>
   );
 };
