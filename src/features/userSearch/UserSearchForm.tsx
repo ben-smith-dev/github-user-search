@@ -2,6 +2,7 @@ import { useRef } from 'react';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../../app/store';
 import { fetchUser } from './userSlice';
+import SearchForm from '../../common/components/SearchForm';
 
 const UserSearchForm: React.FC = () => {
   const userSearch = useRef<HTMLInputElement | null>(null);
@@ -23,17 +24,11 @@ const UserSearchForm: React.FC = () => {
   };
 
   return (
-    <form onSubmit={onSubmit}>
-      <label htmlFor="userSearchInput">Username</label>
-      <input
-        type="search"
-        id="userSearchInput"
-        autoComplete="off"
-        ref={userSearch}
-      />
-
-      <button type="submit">Search</button>
-    </form>
+    <SearchForm
+      onSubmit={onSubmit}
+      searchRef={userSearch}
+      searchPreviewText="Username"
+    />
   );
 };
 
