@@ -89,6 +89,7 @@ a.limitedStyle {
 @media (width < 35rem) {
   .userCard {
     min-width: 18rem;
+    width: 85vw;
   }
 
   .cardHeader {
