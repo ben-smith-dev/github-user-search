@@ -2,7 +2,7 @@ import { useRef } from 'react';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../../app/store';
 import { fetchUser } from './userSlice';
-import SearchForm from '../../common/components/SearchForm';
+import SearchForm from '../../common/components/searchForm/SearchForm';
 
 const UserSearchForm: React.FC = () => {
   const userSearch = useRef<HTMLInputElement | null>(null);
