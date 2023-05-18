@@ -1,4 +1,4 @@
-import { PublicGitHubUser } from '../../common/services/publicGitHubApi';
+import { PublicGitHubUser } from '../../services/publicGitHubApi';
 import styles from './userCard.module.css';
 
 export interface UserCardProps {

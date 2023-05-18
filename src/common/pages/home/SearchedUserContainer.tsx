@@ -1,6 +1,6 @@
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../app/store';
-import UserCard from '../../../features/userSearch/UserCard';
+import UserCard from '../../components/userCard/UserCard';
 
 const SearchedUserContainer: React.FC = () => {
   const user = useSelector((state: RootState) => state.user);
