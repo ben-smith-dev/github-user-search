@@ -86,7 +86,7 @@ a.limitedStyle {
   width: fit-content;
 }
 
-@media (width < 30rem) {
+@media (width < 35rem) {
   .userCard {
     min-width: 18rem;
   }
