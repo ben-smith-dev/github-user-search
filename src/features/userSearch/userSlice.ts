@@ -4,24 +4,26 @@ import {
   PublicGitHubUser,
 } from '../../common/services/publicGitHubApi';
 
-export const fetchUser = createAsyncThunk('user/fetchUser', getUser);
+const sliceDomain = 'users';
 
-const userSlice = createSlice<PublicGitHubUser | null, {}, 'user'>({
-  name: 'user',
-  initialState: null,
+export const fetchUser = createAsyncThunk(`${sliceDomain}/fetchUser`, getUser);
+
+const userSlice = createSlice<PublicGitHubUser[], {}, typeof sliceDomain>({
+  name: sliceDomain,
+  initialState: [],
   reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(fetchUser.pending, (_, action) => {
         console.log(`fetching user: ${action.meta.arg}`);
       })
-      .addCase(fetchUser.fulfilled, (_, action) => {
-        return action.payload;
+      .addCase(fetchUser.fulfilled, (state, action) => {
+        return [action.payload, ...state];
       })
       .addCase(fetchUser.rejected, (_, action) => {
         console.log(`Failed to fetch user ${action.meta.arg}`);
 
-        return null;
+        return [];
       });
   },
 });
