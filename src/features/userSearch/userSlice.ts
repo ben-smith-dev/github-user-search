@@ -45,7 +45,10 @@ const userSlice = createSlice<UsersSlice, {}, typeof sliceDomain>({
         console.log(`fetching user: ${action.meta.arg}`);
       })
       .addCase(fetchUser.fulfilled, (state, action) => {
-        const endIndex: number = Math.min(10, state.length + 1);
+        const endIndex: number = Math.min(
+          maxNumberStoredUsers,
+          state.length + 1
+        );
 
         return [action.payload, ...state].slice(0, endIndex);
       })
