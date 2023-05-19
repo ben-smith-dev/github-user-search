@@ -35,10 +35,14 @@ export const fetchUser = createAsyncThunk<
   dispatchConditionRejection: true,
 });
 
-const userSlice = createSlice<UsersSlice, {}, typeof sliceDomain>({
+const userSlice = createSlice({
   name: sliceDomain,
   initialState,
-  reducers: {},
+  reducers: {
+    clearUsers(state: UsersSlice) {
+      return [];
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchUser.pending, (_, action) => {
@@ -75,4 +79,5 @@ const userSlice = createSlice<UsersSlice, {}, typeof sliceDomain>({
   },
 });
 
+export const { clearUsers } = userSlice.actions;
 export default userSlice.reducer;

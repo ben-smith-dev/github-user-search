@@ -90,6 +90,8 @@ a.limitedStyle {
   .userCard {
     min-width: 18rem;
     width: 85vw;
+
+    transition: none;
   }
 
   .cardHeader {

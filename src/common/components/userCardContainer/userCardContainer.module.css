@@ -1,3 +1,53 @@
+.containerHeader {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: 2rem;
+
+  padding: 0rem 2rem;
+}
+
+.containerHeader > * {
+  align-self: end;
+  margin: 0;
+}
+
+.containerHeader > button {
+  border-radius: 0.5rem;
+  border-style: none;
+  padding: 1em;
+
+  justify-self: end;
+
+  font-weight: bold;
+  width: fit-content;
+  height: fit-content;
+
+  transition: all 150ms 100ms ease-in-out;
+}
+
+.containerHeader > button:focus {
+  outline-style: solid;
+  outline-width: 2px;
+  outline-color: invert;
+}
+
+.activeButton {
+  background-color: rgb(215, 29, 29);
+}
+
+.activeButton:hover {
+  transform: scale3d(1.05, 1.05, 1);
+  cursor: pointer;
+}
+
+.containerHeader > .activeButton:focus,
+.containerHeader > .activeButton:active {
+  transition-delay: 0ms;
+
+  background-color: rgb(150, 23, 23);
+}
+
 .gridContainer {
   display: grid;
   justify-content: center;
