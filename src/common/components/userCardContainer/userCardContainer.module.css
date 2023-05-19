@@ -26,11 +26,10 @@
   transition: all 150ms 100ms ease-in-out;
 }
 
-.inactiveButton {
-  pointer-events: none;
-
-  background-color: rgb(115, 115, 115);
-  opacity: 75%;
+.containerHeader > button:focus {
+  outline-style: solid;
+  outline-width: 2px;
+  outline-color: invert;
 }
 
 .activeButton {
@@ -42,15 +41,11 @@
   cursor: pointer;
 }
 
-.containerHeader > button:focus,
-.containerHeader > button:active {
+.containerHeader > .activeButton:focus,
+.containerHeader > .activeButton:active {
   transition-delay: 0ms;
 
   background-color: rgb(150, 23, 23);
-
-  outline-style: solid;
-  outline-width: 2px;
-  outline-color: invert;
 }
 
 .gridContainer {

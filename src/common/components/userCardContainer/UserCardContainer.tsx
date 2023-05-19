@@ -15,8 +15,8 @@ const UserCardContainer: React.FC<UserCardContainerProps> = ({
   clearContainerPrompt,
   clearContainer,
 }) => {
-  const buttonClass: string =
-    0 < users.length ? `${styles.activeButton}` : `${styles.inactiveButton}`;
+  const hasUsers: boolean = 0 < users.length;
+  const buttonClass: string = hasUsers ? `${styles.activeButton}` : ``;
 
   return (
     <div>
@@ -25,7 +25,11 @@ const UserCardContainer: React.FC<UserCardContainerProps> = ({
           {title} [{users.length}]
         </h3>
 
-        <button onClick={clearContainer} className={buttonClass}>
+        <button
+          onClick={clearContainer}
+          className={buttonClass}
+          disabled={!hasUsers}
+        >
           {clearContainerPrompt}
         </button>
       </div>
