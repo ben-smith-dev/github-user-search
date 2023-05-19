@@ -13,8 +13,6 @@
 }
 
 .containerHeader > button {
-  background-color: rgb(215, 29, 29);
-
   border-radius: 0.5rem;
   border-style: none;
   padding: 1em;
@@ -28,7 +26,18 @@
   transition: all 150ms 100ms ease-in-out;
 }
 
-.containerHeader > button:hover {
+.inactiveButton {
+  pointer-events: none;
+
+  background-color: rgb(115, 115, 115);
+  opacity: 75%;
+}
+
+.activeButton {
+  background-color: rgb(215, 29, 29);
+}
+
+.activeButton:hover {
   transform: scale3d(1.05, 1.05, 1);
   cursor: pointer;
 }
