@@ -1,4 +1,4 @@
-import Home from '../common/pages/Home';
+import Home from '../common/pages/home/Home';
 import './app.css';
 
 const App: React.FC = () => {

@@ -1,5 +1,4 @@
 :root {
-  --card-text-color: white;
   --card-bg-color: gray;
 }
 
@@ -11,7 +10,8 @@ a.limitedStyle {
 .userCard {
   border-radius: 0.5rem;
 
-  color: var(--card-text-color);
+  display: inline-block;
+
   background-color: var(--card-bg-color);
 
   min-width: 30rem;
@@ -89,6 +89,7 @@ a.limitedStyle {
 @media (width < 35rem) {
   .userCard {
     min-width: 18rem;
+    width: 85vw;
   }
 
   .cardHeader {
