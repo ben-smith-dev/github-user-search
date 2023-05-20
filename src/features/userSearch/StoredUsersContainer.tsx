@@ -6,7 +6,7 @@ import { clearUsers } from './usersSlice';
 
 const StoredUsersContainer: React.FC = () => {
   const users: PublicGitHubUser[] = useSelector(
-    (state: RootState) => state.users
+    (state: RootState) => state.users.searchedUsers
   );
 
   const dispatch = useDispatch<AppDispatch>();
