@@ -1,0 +1,63 @@
+.searchedUserContainer {
+  min-width: min-content;
+  width: 100%;
+  max-width: 100ch;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.userSearchForm {
+  width: 90%;
+  margin: auto;
+}
+
+.searchResultText {
+  display: flex;
+  justify-content: space-between;
+
+  padding: 0px 0.5rem;
+  margin: 0.5em 0em;
+}
+
+.searchResultText > p {
+  margin: 0;
+
+  /* using max width as CH since usernames can only be ~40chs long.
+     Adding a few extra chs for padding.
+  */
+  max-width: 50ch;
+  contain: content;
+}
+
+.scaleVisibilityIn {
+  transition: transform 100ms ease-in-out;
+  animation: scaleIn 100ms ease-in forwards;
+}
+
+.scaleVisibilityOut {
+  animation: scaleOut 100ms ease-out forwards;
+}
+
+@keyframes scaleIn {
+  0% {
+    visibility: hidden;
+    transform: scale(0);
+  }
+  100% {
+    transform: scale(1);
+    visibility: visible;
+  }
+}
+
+@keyframes scaleOut {
+  0% {
+    transform: scale(1);
+    visibility: visible;
+  }
+  100% {
+    visibility: hidden;
+    transform: scale(0);
+  }
+}
