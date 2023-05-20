@@ -2,6 +2,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../../app/store';
 import UserCard from '../../components/userCard/UserCard';
 import styles from './searchedUserContainer.module.css';
+import UserSearchForm from '../../../features/userSearch/UserSearchForm';
 
 const SearchedUserContainer: React.FC = () => {
   const searchResult = useSelector((state: RootState) => {
@@ -13,6 +14,8 @@ const SearchedUserContainer: React.FC = () => {
   return (
     <div className={styles.searchedUserContainer}>
       <div className={`${styles.userSearchForm}`}>
+        <UserSearchForm />
+
         {searchResult && (
           <div className={styles.searchResultText}>
             <p>Showing result for: {searchResult?.searchedUsername}</p>
