@@ -26,19 +26,22 @@ const SearchedUserContainer: React.FC = () => {
       <div className={`${styles.userSearchForm}`}>
         <UserSearchForm />
 
-        {searchResult && (
-          <div className={styles.searchResultText}>
-            <p>Showing result for: {searchResult?.searchedUsername}</p>
+        <div
+          className={`
+            ${styles.searchResultText} 
+            ${!searchResult && 'visibilityHidden'}`}
+        >
+          <p>Showing result for: {searchResult?.searchedUsername}</p>
 
-            <p>{searchResult?.user ? 'user found' : 'no user found'}</p>
-          </div>
-        )}
+          <p>{searchResult?.user ? 'user found' : 'no user found'}</p>
+        </div>
       </div>
 
       <div
-        className={`centerChildrenHorizontal 
-        ${!hadPreviousUser && 'visibilityHidden'}
-        ${searchResult?.user ? styles.scaleVisibilityIn : fadeOutStyle}`}
+        className={`
+          centerChildrenHorizontal 
+          ${!hadPreviousUser && 'visibilityHidden'}
+          ${searchResult?.user ? styles.scaleVisibilityIn : fadeOutStyle}`}
       >
         <UserCard user={searchResult?.user ?? null} />
       </div>
