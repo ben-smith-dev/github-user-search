@@ -4,12 +4,15 @@ import {
   createSlice,
 } from '@reduxjs/toolkit';
 import {
+  getRateLimit,
   getUser,
+  GitHubResponseHeaders,
   PublicGitHubApiResult,
   PublicGitHubUser,
   RateLimit,
 } from '../../common/services/publicGitHubApi';
 import { RootState } from '../../app/store';
+import { AxiosError } from 'axios';
 
 const sliceDomain: string = 'users';
 interface UsersSlice {
@@ -41,18 +44,39 @@ export const fetchUser = createAsyncThunk<
   PublicGitHubApiResult<PublicGitHubUser>,
   string,
   { state: RootState }
->(`${sliceDomain}/fetchUser`, getUser, {
-  condition: (username: string, { getState }) => {
-    const { users } = getState();
-    const cachedUserWithUsername = users.searchedUsers.find((user) => {
-      return searchedUserFilter(user, username);
-    });
+>(
+  `${sliceDomain}/fetchUser`,
+  async (username: string, { getState, rejectWithValue }) => {
+    try {
+      return await getUser(username);
+    } catch (error: unknown) {
+      if (error instanceof AxiosError && error.response?.headers) {
+        const rateLimit = getRateLimit(
+          error.response?.headers as GitHubResponseHeaders
+        );
 
-    // Cancel if user is already in store.
-    return !cachedUserWithUsername;
+        return rejectWithValue({
+          rateLimit,
+        });
+      }
+    }
+    const { rateLimit } = getState().users;
+
+    return rejectWithValue(rateLimit);
   },
-  dispatchConditionRejection: true,
-});
+  {
+    condition: (username: string, { getState }) => {
+      const { users } = getState();
+      const cachedUserWithUsername = users.searchedUsers.find((user) => {
+        return searchedUserFilter(user, username);
+      });
+
+      // Cancel if user is already in store.
+      return !cachedUserWithUsername;
+    },
+    dispatchConditionRejection: true,
+  }
+);
 
 const userSlice = createSlice({
   name: sliceDomain,
@@ -119,6 +143,15 @@ const userSlice = createSlice({
         }
 
         console.log(`Failed to fetch user ${action.meta.arg}`);
+
+        // Update rate limit from rejected value.
+        const rejectedValue =
+          action.payload as PublicGitHubApiResult<PublicGitHubUser>;
+        if (action.meta.rejectedWithValue && rejectedValue) {
+          rateLimit = {
+            ...rejectedValue.rateLimit,
+          };
+        }
 
         return {
           searchedUsers,
