@@ -76,7 +76,9 @@ export const getUser = async (
   };
 };
 
-const getRateLimit = (responseHeaders: GitHubResponseHeaders): RateLimit => {
+export const getRateLimit = (
+  responseHeaders: GitHubResponseHeaders
+): RateLimit => {
   return {
     // Convert rate limit to UNIX date from using seconds to using milliseconds.
     reset: responseHeaders['x-ratelimit-reset'] * 1000,
