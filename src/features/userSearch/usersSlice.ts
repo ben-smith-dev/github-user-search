@@ -5,7 +5,9 @@ import {
 } from '@reduxjs/toolkit';
 import {
   getUser,
+  PublicGitHubApiResult,
   PublicGitHubUser,
+  RateLimit,
 } from '../../common/services/publicGitHubApi';
 import { RootState } from '../../app/store';
 
@@ -17,6 +19,7 @@ interface UsersSlice {
     user?: PublicGitHubUser;
     error?: SerializedError;
   } | null;
+  rateLimit: RateLimit | null;
 }
 
 const maxNumberStoredUsers: number = 10;
@@ -24,6 +27,7 @@ const maxNumberStoredUsers: number = 10;
 const initialState: UsersSlice = {
   searchedUsers: [],
   searchResult: null,
+  rateLimit: null,
 };
 
 const searchedUserFilter = (
@@ -34,7 +38,7 @@ const searchedUserFilter = (
 };
 
 export const fetchUser = createAsyncThunk<
-  PublicGitHubUser,
+  PublicGitHubApiResult<PublicGitHubUser>,
   string,
   { state: RootState }
 >(`${sliceDomain}/fetchUser`, getUser, {
@@ -70,48 +74,62 @@ const userSlice = createSlice({
       );
 
       const username: string = action.meta.arg;
+      const searchedUser = action.payload.data;
+      let users: PublicGitHubUser[] = [];
 
-      return {
-        searchedUsers: [action.payload, ...searchedUsers].slice(0, endIndex),
-        searchResult: {
-          searchedUsername: username,
-          user: action.payload,
-        },
-      };
-    });
-
-    builder.addCase(fetchUser.rejected, ({ searchedUsers }, action) => {
-      const searchedUsername = action.meta.arg;
-
-      if (action.meta.condition) {
-        // Failed condition. Place searched user at the start of list.
-        const searchedUser = searchedUsers.find((user) =>
-          searchedUserFilter(user, searchedUsername)
-        ) as PublicGitHubUser;
-
-        const otherUsers = searchedUsers.filter(
-          (user) => !searchedUserFilter(user, searchedUsername)
-        );
-
-        return {
-          searchedUsers: [searchedUser, ...otherUsers],
-          searchResult: {
-            searchedUsername: searchedUsername,
-            user: searchedUser,
-          },
-        };
+      if (searchedUser) {
+        users = [searchedUser, ...searchedUsers].slice(0, endIndex);
+      } else {
+        users = searchedUsers;
       }
 
-      console.log(`Failed to fetch user ${action.meta.arg}`);
-
       return {
-        searchedUsers,
+        searchedUsers: users,
         searchResult: {
-          searchedUsername: searchedUsername,
-          error: action.error,
+          searchedUsername: username,
+          user: searchedUser,
         },
+        rateLimit: action.payload.rateLimit,
       };
     });
+
+    builder.addCase(
+      fetchUser.rejected,
+      ({ searchedUsers, rateLimit }, action) => {
+        const searchedUsername = action.meta.arg;
+
+        if (action.meta.condition) {
+          // Failed condition. Place searched user at the start of list.
+          const searchedUser = searchedUsers.find((user) =>
+            searchedUserFilter(user, searchedUsername)
+          ) as PublicGitHubUser;
+
+          const otherUsers = searchedUsers.filter(
+            (user) => !searchedUserFilter(user, searchedUsername)
+          );
+
+          return {
+            searchedUsers: [searchedUser, ...otherUsers],
+            searchResult: {
+              searchedUsername: searchedUsername,
+              user: searchedUser,
+            },
+            rateLimit,
+          };
+        }
+
+        console.log(`Failed to fetch user ${action.meta.arg}`);
+
+        return {
+          searchedUsers,
+          searchResult: {
+            searchedUsername: searchedUsername,
+            error: action.error,
+          },
+          rateLimit,
+        };
+      }
+    );
   },
 });
 
