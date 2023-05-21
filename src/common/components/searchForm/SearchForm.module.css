@@ -5,9 +5,9 @@
   --container-height-max: 50px;
   --container-height: 5vh;
 
+  --container-width: 100%;
   --container-width-min: 250px;
-  --container-width-max: 600px;
-  --container-width: 75%;
+  --container-width-max: 100vw;
 
   --border-radius: 10px;
   --border-width: 2px;

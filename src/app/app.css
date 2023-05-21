@@ -9,3 +9,7 @@
 .fillParentWidth {
   width: 100%;
 }
+
+.visibilityHidden {
+  visibility: hidden;
+}

@@ -1,7 +1,7 @@
 import { useRef } from 'react';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../../app/store';
-import { fetchUser } from './userSlice';
+import { fetchUser } from './usersSlice';
 import SearchForm from '../../common/components/searchForm/SearchForm';
 
 const UserSearchForm: React.FC = () => {

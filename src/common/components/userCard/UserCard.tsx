@@ -16,9 +16,9 @@ const UserCard: React.FC<UserCardProps> = ({ user }: UserCardProps) => {
         target="_blank"
         rel="noreferrer"
         className={`
-      ${styles.userCard}
-      ${styles.limitedStyle}
-      `}
+          ${styles.userCard}
+          ${styles.limitedStyle}
+        `}
       >
         <div className={styles.cardHeader}>
           <img
