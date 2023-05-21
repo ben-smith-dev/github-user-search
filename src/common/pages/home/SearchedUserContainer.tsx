@@ -1,15 +1,25 @@
 import { useSelector } from 'react-redux';
+import { useEffect, useState } from 'react';
 import { RootState } from '../../../app/store';
 import UserCard from '../../components/userCard/UserCard';
-import styles from './searchedUserContainer.module.css';
 import UserSearchForm from '../../../features/userSearch/UserSearchForm';
+import styles from './searchedUserContainer.module.css';
 
 const SearchedUserContainer: React.FC = () => {
+  const [hadPreviousUser, setHadPreviousUser] = useState(false);
+  const [fadeOutStyle, setFadeOutStyle] = useState('');
+
   const searchResult = useSelector((state: RootState) => {
     return state.users.searchResult;
   });
 
-  const user = searchResult?.user ?? null;
+  useEffect(() => {
+    setHadPreviousUser((prev) => {
+      setFadeOutStyle(prev ? styles.scaleVisibilityOut : '');
+
+      return searchResult?.user != null;
+    });
+  }, [searchResult]);
 
   return (
     <div className={styles.searchedUserContainer}>
@@ -20,17 +30,17 @@ const SearchedUserContainer: React.FC = () => {
           <div className={styles.searchResultText}>
             <p>Showing result for: {searchResult?.searchedUsername}</p>
 
-            <p>{user ? 'user found' : 'no user found'}</p>
+            <p>{searchResult?.user ? 'user found' : 'no user found'}</p>
           </div>
         )}
       </div>
 
       <div
-        className={`centerChildrenHorizontal ${
-          user ? styles.scaleVisibilityIn : styles.scaleVisibilityOut
-        }`}
+        className={`centerChildrenHorizontal 
+        ${!hadPreviousUser && 'visibilityHidden'}
+        ${searchResult?.user ? styles.scaleVisibilityIn : fadeOutStyle}`}
       >
-        <UserCard user={user} />
+        <UserCard user={searchResult?.user ?? null} />
       </div>
     </div>
   );
