@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { AxiosResponseHeaders, RawAxiosResponseHeaders } from 'axios';
 
 const githubRestEndpoint = 'https://api.github.com';
 
@@ -38,9 +38,50 @@ export interface PublicGitHubUser {
   updated_at: string;
 }
 
-export const getUser = async (username: string) => {
-  const userUrl = githubRestEndpoint + `/users/${username}`;
-  const response = await axios.get<PublicGitHubUser>(userUrl);
+export interface RateLimit {
+  limit: number;
+  used: number;
+  remaining: number;
+  reset: number;
+}
 
-  return response.data;
+export interface PublicGitHubApiResult<T> {
+  data?: T;
+  rateLimit: RateLimit;
+}
+
+interface RateLimitHeaders {
+  'x-ratelimit-limit': number;
+  'x-ratelimit-remaining': number;
+  'x-ratelimit-reset': number;
+  'x-ratelimit-resource': string;
+  'x-ratelimit-used': number;
+}
+
+export type GitHubResponseHeaders = RawAxiosResponseHeaders &
+  AxiosResponseHeaders &
+  RateLimitHeaders;
+
+export const getUser = async (
+  username: string
+): Promise<PublicGitHubApiResult<PublicGitHubUser>> => {
+  const userUrl = githubRestEndpoint + `/users/${username}`;
+  const { headers, data } = await axios.get<PublicGitHubUser>(userUrl);
+
+  const rateLimit = getRateLimit(headers as GitHubResponseHeaders);
+
+  return {
+    data,
+    rateLimit,
+  };
+};
+
+const getRateLimit = (responseHeaders: GitHubResponseHeaders): RateLimit => {
+  return {
+    // Convert rate limit to UNIX date from using seconds to using milliseconds.
+    reset: responseHeaders['x-ratelimit-reset'] * 1000,
+    used: responseHeaders['x-ratelimit-used'],
+    remaining: responseHeaders['x-ratelimit-remaining'],
+    limit: responseHeaders['x-ratelimit-limit'],
+  };
 };
