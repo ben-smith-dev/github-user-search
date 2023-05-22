@@ -1,9 +1,7 @@
 :root {
-  --submit-button-width: 70px;
+  --submit-button-width: 4em;
 
-  --container-height-min: 35px;
-  --container-height-max: 50px;
-  --container-height: 5vh;
+  --container-height: 3em;
 
   --container-width: 100%;
   --container-width-min: 250px;
@@ -11,17 +9,15 @@
 
   --border-radius: 10px;
   --border-width: 2px;
+
+  --search-input-padding: 1em;
 }
 
 .searchContainer {
   position: relative;
   display: inline-block;
 
-  height: clamp(
-    var(--container-height-min),
-    var(--container-height),
-    var(--container-height-max)
-  );
+  height: var(--container-height);
 
   width: var(--container-width);
   min-width: var(--container-width-min);
@@ -29,7 +25,8 @@
 }
 
 .searchInput {
-  padding-right: var(--submit-button-width);
+  padding: var(--search-input-padding);
+  padding-right: calc(var(--submit-button-width) + 0.25em);
   padding-left: 5px;
 
   font-size: 1em;
@@ -61,7 +58,6 @@
   width: var(--submit-button-width);
 
   font-size: 1em;
-  padding: 2px;
 
   background-color: transparent;
   border: var(--border-width) solid transparent;
