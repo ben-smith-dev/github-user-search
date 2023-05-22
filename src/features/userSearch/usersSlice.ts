@@ -82,8 +82,11 @@ const userSlice = createSlice({
   name: sliceDomain,
   initialState,
   reducers: {
-    clearUsers(state: UsersSlice) {
-      return initialState;
+    clearUsers(state: UsersSlice): UsersSlice {
+      return {
+        ...state,
+        searchedUsers: [],
+      };
     },
   },
   extraReducers: (builder) => {
