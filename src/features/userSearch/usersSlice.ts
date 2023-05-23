@@ -4,10 +4,15 @@ import {
   createSlice,
 } from '@reduxjs/toolkit';
 import {
+  getRateLimit,
   getUser,
+  GitHubResponseHeaders,
+  PublicGitHubApiResult,
   PublicGitHubUser,
+  RateLimit,
 } from '../../common/services/publicGitHubApi';
 import { RootState } from '../../app/store';
+import { AxiosError } from 'axios';
 
 const sliceDomain: string = 'users';
 interface UsersSlice {
@@ -17,6 +22,7 @@ interface UsersSlice {
     user?: PublicGitHubUser;
     error?: SerializedError;
   } | null;
+  rateLimit: RateLimit | null;
 }
 
 const maxNumberStoredUsers: number = 10;
@@ -24,6 +30,7 @@ const maxNumberStoredUsers: number = 10;
 const initialState: UsersSlice = {
   searchedUsers: [],
   searchResult: null,
+  rateLimit: null,
 };
 
 const searchedUserFilter = (
@@ -34,28 +41,52 @@ const searchedUserFilter = (
 };
 
 export const fetchUser = createAsyncThunk<
-  PublicGitHubUser,
+  PublicGitHubApiResult<PublicGitHubUser>,
   string,
   { state: RootState }
->(`${sliceDomain}/fetchUser`, getUser, {
-  condition: (username: string, { getState }) => {
-    const { users } = getState();
-    const cachedUserWithUsername = users.searchedUsers.find((user) => {
-      return searchedUserFilter(user, username);
-    });
+>(
+  `${sliceDomain}/fetchUser`,
+  async (username: string, { getState, rejectWithValue }) => {
+    try {
+      return await getUser(username);
+    } catch (error: unknown) {
+      if (error instanceof AxiosError && error.response?.headers) {
+        const rateLimit = getRateLimit(
+          error.response?.headers as GitHubResponseHeaders
+        );
 
-    // Cancel if user is already in store.
-    return !cachedUserWithUsername;
+        return rejectWithValue({
+          rateLimit,
+        });
+      }
+    }
+    const { rateLimit } = getState().users;
+
+    return rejectWithValue(rateLimit);
   },
-  dispatchConditionRejection: true,
-});
+  {
+    condition: (username: string, { getState }) => {
+      const { users } = getState();
+      const cachedUserWithUsername = users.searchedUsers.find((user) => {
+        return searchedUserFilter(user, username);
+      });
+
+      // Cancel if user is already in store.
+      return !cachedUserWithUsername;
+    },
+    dispatchConditionRejection: true,
+  }
+);
 
 const userSlice = createSlice({
   name: sliceDomain,
   initialState,
   reducers: {
-    clearUsers(state: UsersSlice) {
-      return initialState;
+    clearUsers(state: UsersSlice): UsersSlice {
+      return {
+        ...state,
+        searchedUsers: [],
+      };
     },
   },
   extraReducers: (builder) => {
@@ -70,48 +101,71 @@ const userSlice = createSlice({
       );
 
       const username: string = action.meta.arg;
+      const searchedUser = action.payload.data;
+      let users: PublicGitHubUser[] = [];
 
-      return {
-        searchedUsers: [action.payload, ...searchedUsers].slice(0, endIndex),
-        searchResult: {
-          searchedUsername: username,
-          user: action.payload,
-        },
-      };
-    });
-
-    builder.addCase(fetchUser.rejected, ({ searchedUsers }, action) => {
-      const searchedUsername = action.meta.arg;
-
-      if (action.meta.condition) {
-        // Failed condition. Place searched user at the start of list.
-        const searchedUser = searchedUsers.find((user) =>
-          searchedUserFilter(user, searchedUsername)
-        ) as PublicGitHubUser;
-
-        const otherUsers = searchedUsers.filter(
-          (user) => !searchedUserFilter(user, searchedUsername)
-        );
-
-        return {
-          searchedUsers: [searchedUser, ...otherUsers],
-          searchResult: {
-            searchedUsername: searchedUsername,
-            user: searchedUser,
-          },
-        };
+      if (searchedUser) {
+        users = [searchedUser, ...searchedUsers].slice(0, endIndex);
+      } else {
+        users = searchedUsers;
       }
 
-      console.log(`Failed to fetch user ${action.meta.arg}`);
-
       return {
-        searchedUsers,
+        searchedUsers: users,
         searchResult: {
-          searchedUsername: searchedUsername,
-          error: action.error,
+          searchedUsername: username,
+          user: searchedUser,
         },
+        rateLimit: action.payload.rateLimit,
       };
     });
+
+    builder.addCase(
+      fetchUser.rejected,
+      ({ searchedUsers, rateLimit }, action) => {
+        const searchedUsername = action.meta.arg;
+
+        if (action.meta.condition) {
+          // Failed condition. Place searched user at the start of list.
+          const searchedUser = searchedUsers.find((user) =>
+            searchedUserFilter(user, searchedUsername)
+          ) as PublicGitHubUser;
+
+          const otherUsers = searchedUsers.filter(
+            (user) => !searchedUserFilter(user, searchedUsername)
+          );
+
+          return {
+            searchedUsers: [searchedUser, ...otherUsers],
+            searchResult: {
+              searchedUsername: searchedUsername,
+              user: searchedUser,
+            },
+            rateLimit,
+          };
+        }
+
+        console.log(`Failed to fetch user ${action.meta.arg}`);
+
+        // Update rate limit from rejected value.
+        const rejectedValue =
+          action.payload as PublicGitHubApiResult<PublicGitHubUser>;
+        if (action.meta.rejectedWithValue && rejectedValue) {
+          rateLimit = {
+            ...rejectedValue.rateLimit,
+          };
+        }
+
+        return {
+          searchedUsers,
+          searchResult: {
+            searchedUsername: searchedUsername,
+            error: action.error,
+          },
+          rateLimit,
+        };
+      }
+    );
   },
 });
 
