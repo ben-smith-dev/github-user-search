@@ -11,8 +11,51 @@ enum InitialAnimationRequiredState {
   NotRequired,
 }
 
+class PatternRequirementPart {
+  constructor(
+    public readonly pattern: RegExp,
+    public readonly message: string
+  ) {}
+}
+
+const usernamePatternRequirements: PatternRequirementPart[] = [
+  new PatternRequirementPart(
+    new RegExp(/^[a-z\d]/i),
+    'Can only start with a letter or number.'
+  ),
+  new PatternRequirementPart(
+    new RegExp(/^[a-z\d-]+$/i),
+    'Can only include letter, numbers, and hyphens.'
+  ),
+  new PatternRequirementPart(
+    new RegExp(/^(?!.*--)/, 'i'),
+    'Cannot include consecutive hyphens'
+  ),
+  new PatternRequirementPart(
+    new RegExp(/[a-z\d]$/i),
+    'Can only end with a letter or number.'
+  ),
+  new PatternRequirementPart(
+    new RegExp(/^.{1,39}$/),
+    'Has to be 1-39 characters long.'
+  ),
+];
+
+const isValidUsername = (username: string): boolean => {
+  // Check search term against username pattern requirements.
+  for (let index = 0; index < usernamePatternRequirements.length; index++) {
+    const { pattern } = usernamePatternRequirements[index];
+
+    if (!pattern.test(username)) {
+      return false;
+    }
+  }
+  return true;
+};
+
 const UserSearchForm: React.FC = () => {
   const userSearch = useRef<HTMLInputElement | null>(null);
+  const [hasUsernamePatternError, setHasUsernamePatternError] = useState(false);
   const [addRateLimitAnimation, setAddRateLimitAnimation] = useState(
     InitialAnimationRequiredState.None
   );
@@ -28,13 +71,17 @@ const UserSearchForm: React.FC = () => {
 
     const username = userSearch.current?.value;
 
-    if (username) {
+    if (username && isValidUsername(username)) {
       dispatch(fetchUser(username));
-    }
 
-    // Clear search value.
-    if (userSearch.current) {
-      userSearch.current.value = '';
+      // Clear search value.
+      if (userSearch.current) {
+        userSearch.current.value = '';
+      }
+
+      setHasUsernamePatternError(false);
+    } else {
+      setHasUsernamePatternError(true);
     }
   };
 
@@ -77,6 +124,17 @@ const UserSearchForm: React.FC = () => {
           searchRef={userSearch}
           searchPreviewText="Username"
         />
+
+        <div
+          className={`
+          ${styles.searchInvalidPopup}
+          ${!hasUsernamePatternError && 'visibilityHidden'}`}
+        >
+          <p>
+            Username may only contain alphanumeric characters or single hyphens,
+            and cannot begin or end with a hyphen. Max length of 39 characters.
+          </p>
+        </div>
       </div>
 
       {rateLimit && (
