@@ -2,10 +2,12 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Home from '../common/pages/home/Home';
 import PageNotFound from '../common/pages/404/PageNotFound';
 import './app.css';
+import Header from '../common/components/header/Header';
 
 const App: React.FC = () => {
   return (
-    <div className="appContainer"> 
+    <div className="appContainer">
+      <Header />
       <main>
         <BrowserRouter basename="/">
           <Routes>
