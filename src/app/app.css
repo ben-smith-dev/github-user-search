@@ -20,7 +20,7 @@ main {
   overflow-inline: scroll;
 
   display: grid;
-  grid-template-rows: max-content max-content;
+  grid-template-rows: max-content auto;
 }
 
 /* Utility Classes */
