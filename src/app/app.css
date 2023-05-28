@@ -1,5 +1,5 @@
 body {
-  padding: 0.25rem;
+  padding: 0rem 0.25rem;
 }
 
 html,
@@ -20,7 +20,7 @@ main {
   overflow-inline: scroll;
 
   display: grid;
-  grid-template-rows: 100%;
+  grid-template-rows: max-content max-content;
 }
 
 /* Utility Classes */
