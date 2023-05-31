@@ -1,7 +1,3 @@
-body {
-  padding: 0rem 0.25rem;
-}
-
 html,
 body,
 #root,
@@ -10,6 +6,7 @@ main {
   width: 100%;
 
   margin: 0rem;
+  padding: 0rem;
   box-sizing: border-box;
 }
 
@@ -20,9 +17,12 @@ main {
   overflow-inline: scroll;
 
   display: grid;
-  grid-template-rows: max-content auto;
+  grid-template-rows: auto 1fr 5rem;
 }
 
+.appContainer > main {
+  padding: 0rem 0.25rem;
+}
 /* Utility Classes */
 
 .centerChildrenHorizontal {
