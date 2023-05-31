@@ -1,5 +1,7 @@
-import StoredUsersContainer from '../../../features/userSearch/StoredUsersContainer';
-import SearchedUserContainer from './SearchedUserContainer';
+import {
+  SearchedUserContainer,
+  StoredUsersContainer,
+} from '../../../features/userSearch';
 
 export const Home: React.FC = () => {
   return (
