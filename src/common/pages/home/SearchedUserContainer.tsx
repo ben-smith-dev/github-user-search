@@ -1,9 +1,10 @@
 import { useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { RootState } from '../../../app/store';
-import UserCard from '../../components/userCard/UserCard';
-import UserSearchForm from '../../../features/userSearch/UserSearchForm';
+import { UserCard } from '../../components';
+
 import styles from './searchedUserContainer.module.css';
+import UserSearchForm from '../../../features/userSearch/UserSearchForm';
 
 const SearchedUserContainer: React.FC = () => {
   const [hadPreviousUser, setHadPreviousUser] = useState(false);

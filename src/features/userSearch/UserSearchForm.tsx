@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../app/store';
 import { fetchUser } from './usersSlice';
-import SearchForm from '../../common/components/searchForm/SearchForm';
+import { SearchForm } from '../../common/components';
 import styles from './userSearchForm.module.css';
 
 enum InitialAnimationRequiredState {

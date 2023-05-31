@@ -1,8 +1,7 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Home from '../common/pages/home/Home';
 import PageNotFound from '../common/pages/404/PageNotFound';
-import Header from '../common/components/header/Header';
-import Footer from '../common/components/footer/Footer';
+import { Header, Footer } from '../common/components';
 import './app.css';
 
 const App: React.FC = () => {
