@@ -7,7 +7,7 @@ export interface SearchFormProps {
   searchPreviewText: string;
 }
 
-const SearchForm: React.FC<SearchFormProps> = ({
+export const SearchForm: React.FC<SearchFormProps> = ({
   onSubmit,
   searchRef,
   searchPreviewText,
@@ -30,5 +30,3 @@ const SearchForm: React.FC<SearchFormProps> = ({
     </form>
   );
 };
-
-export default SearchForm;

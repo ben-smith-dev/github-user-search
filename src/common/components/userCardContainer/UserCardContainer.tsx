@@ -1,5 +1,5 @@
 import { PublicGitHubUser } from '../../services/publicGitHubApi';
-import UserCard from '../userCard/UserCard';
+import { UserCard } from '../index';
 import styles from './userCardContainer.module.css';
 
 export interface UserCardContainerProps {
@@ -9,7 +9,7 @@ export interface UserCardContainerProps {
   clearContainerPrompt: string;
 }
 
-const UserCardContainer: React.FC<UserCardContainerProps> = ({
+export const UserCardContainer: React.FC<UserCardContainerProps> = ({
   users,
   title,
   clearContainerPrompt,
@@ -44,5 +44,3 @@ const UserCardContainer: React.FC<UserCardContainerProps> = ({
     </div>
   );
 };
-
-export default UserCardContainer;

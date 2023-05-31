@@ -5,7 +5,7 @@ export interface UserCardProps {
   user: PublicGitHubUser | null;
 }
 
-const UserCard: React.FC<UserCardProps> = ({ user }: UserCardProps) => {
+export const UserCard: React.FC<UserCardProps> = ({ user }: UserCardProps) => {
   const joinedDate = new Date(user?.created_at ?? '');
   const joinedYear = joinedDate.getFullYear();
 
@@ -46,5 +46,3 @@ const UserCard: React.FC<UserCardProps> = ({ user }: UserCardProps) => {
     </div>
   );
 };
-
-export default UserCard;
