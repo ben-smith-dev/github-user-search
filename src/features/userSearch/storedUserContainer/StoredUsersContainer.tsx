@@ -1,8 +1,8 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { PublicGitHubUser } from '../../common/services/publicGitHubApi';
-import { AppDispatch, RootState } from '../../app/store';
-import { clearUsers } from './usersSlice';
-import { UserCardContainer } from '../../common/components';
+import { PublicGitHubUser } from '../../../common/services/publicGitHubApi';
+import { AppDispatch, RootState } from '../../../app/store';
+import { clearUsers } from '../usersSlice';
+import { UserCardContainer } from '../../../common/components';
 
 const StoredUsersContainer: React.FC = () => {
   const users: PublicGitHubUser[] = useSelector(
