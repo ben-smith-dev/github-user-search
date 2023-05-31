@@ -1,7 +1,9 @@
-import StoredUsersContainer from '../../../features/userSearch/StoredUsersContainer';
-import SearchedUserContainer from './SearchedUserContainer';
+import {
+  SearchedUserContainer,
+  StoredUsersContainer,
+} from '../../../features/userSearch';
 
-const Home: React.FC = () => {
+export const Home: React.FC = () => {
   return (
     <div className="centerChildrenHorizontal">
       <SearchedUserContainer />
@@ -9,5 +11,3 @@ const Home: React.FC = () => {
     </div>
   );
 };
-
-export default Home;

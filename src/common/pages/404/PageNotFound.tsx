@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router';
 import styles from './pageNotFound.module.css';
 
-const PageNotFound: React.FC = () => {
+export const PageNotFound: React.FC = () => {
   const navigate = useNavigate();
 
   return (
@@ -25,5 +25,3 @@ const PageNotFound: React.FC = () => {
     </div>
   );
 };
-
-export default PageNotFound;

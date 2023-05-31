@@ -1,11 +1,12 @@
 import { useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { RootState } from '../../../app/store';
-import UserCard from '../../components/userCard/UserCard';
-import UserSearchForm from '../../../features/userSearch/UserSearchForm';
+import { UserCard } from '../../../common/components';
+import { UserSearchForm } from '../index';
+
 import styles from './searchedUserContainer.module.css';
 
-const SearchedUserContainer: React.FC = () => {
+export const SearchedUserContainer: React.FC = () => {
   const [hadPreviousUser, setHadPreviousUser] = useState(false);
   const [fadeOutStyle, setFadeOutStyle] = useState('');
 
@@ -48,5 +49,3 @@ const SearchedUserContainer: React.FC = () => {
     </div>
   );
 };
-
-export default SearchedUserContainer;

@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch, RootState } from '../../app/store';
-import { fetchUser } from './usersSlice';
-import SearchForm from '../../common/components/searchForm/SearchForm';
+import { AppDispatch, RootState } from '../../../app/store';
+import { fetchUser } from '../index';
+import { SearchForm } from '../../../common/components';
+
 import styles from './userSearchForm.module.css';
 
 enum InitialAnimationRequiredState {
@@ -18,7 +19,7 @@ class PatternRequirementPart {
   ) {}
 }
 
-const usernamePatternRequirements: PatternRequirementPart[] = [
+export const usernamePatternRequirements: PatternRequirementPart[] = [
   new PatternRequirementPart(
     new RegExp(/^[a-z\d]/i),
     'Can only start with a letter or number.'
@@ -41,7 +42,7 @@ const usernamePatternRequirements: PatternRequirementPart[] = [
   ),
 ];
 
-const isValidUsername = (username: string): boolean => {
+export const isValidUsername = (username: string): boolean => {
   // Check search term against username pattern requirements.
   for (let index = 0; index < usernamePatternRequirements.length; index++) {
     const { pattern } = usernamePatternRequirements[index];
@@ -53,7 +54,7 @@ const isValidUsername = (username: string): boolean => {
   return true;
 };
 
-const UserSearchForm: React.FC = () => {
+export const UserSearchForm: React.FC = () => {
   const userSearch = useRef<HTMLInputElement | null>(null);
   const [hasUsernamePatternError, setHasUsernamePatternError] = useState(false);
   const [addRateLimitAnimation, setAddRateLimitAnimation] = useState(
@@ -158,5 +159,3 @@ const UserSearchForm: React.FC = () => {
     </div>
   );
 };
-
-export default UserSearchForm;
