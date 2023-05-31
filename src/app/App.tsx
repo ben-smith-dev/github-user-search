@@ -3,6 +3,7 @@ import Home from '../common/pages/home/Home';
 import PageNotFound from '../common/pages/404/PageNotFound';
 import './app.css';
 import Header from '../common/components/header/Header';
+import Footer from '../common/components/footer/Footer';
 
 const App: React.FC = () => {
   return (
@@ -16,6 +17,7 @@ const App: React.FC = () => {
           </Routes>
         </BrowserRouter>
       </main>
+      <Footer />
     </div>
   );
 };
