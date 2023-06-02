@@ -14,44 +14,6 @@ import { AxiosError } from 'axios';
 import { RootState } from '../../../app/store';
 import { SliceState } from './index';
 
-export const fetchUser = createAsyncThunk<
-  PublicGitHubApiResult<PublicGitHubUser>,
-  string,
-  { state: RootState }
->(
-  `users/fetchUser`,
-  async (username: string, { getState, rejectWithValue }) => {
-    try {
-      return await getUser(username);
-    } catch (error: unknown) {
-      if (error instanceof AxiosError && error.response?.headers) {
-        const rateLimit = getRateLimit(
-          error.response?.headers as GitHubResponseHeaders
-        );
-
-        return rejectWithValue({
-          rateLimit,
-        });
-      }
-    }
-    const { rateLimit } = getState().users;
-
-    return rejectWithValue(rateLimit);
-  },
-  {
-    condition: (username: string, { getState }) => {
-      const { users } = getState();
-      const hasUserWithUsername: boolean = users.searchedUsers.some(
-        (user) => user.login === username
-      );
-
-      // return false to cancel action.
-      return !hasUserWithUsername;
-    },
-    dispatchConditionRejection: true,
-  }
-);
-
 type ActionHandler<TAction> = (
   sliceState: SliceState,
   action: TAction
@@ -98,6 +60,44 @@ type RejectedAction = PayloadAction<
   ),
   SerializedError
 >;
+
+export const fetchUser = createAsyncThunk<
+  PublicGitHubApiResult<PublicGitHubUser>,
+  string,
+  { state: RootState }
+>(
+  `users/fetchUser`,
+  async (username: string, { getState, rejectWithValue }) => {
+    try {
+      return await getUser(username);
+    } catch (error: unknown) {
+      if (error instanceof AxiosError && error.response?.headers) {
+        const rateLimit = getRateLimit(
+          error.response?.headers as GitHubResponseHeaders
+        );
+
+        return rejectWithValue({
+          rateLimit,
+        });
+      }
+    }
+    const { rateLimit } = getState().users;
+
+    return rejectWithValue(rateLimit);
+  },
+  {
+    condition: (username: string, { getState }) => {
+      const { users } = getState();
+      const hasUserWithUsername: boolean = users.searchedUsers.some(
+        (user) => user.login === username
+      );
+
+      // return false to cancel action.
+      return !hasUserWithUsername;
+    },
+    dispatchConditionRejection: true,
+  }
+);
 
 export const onFetchUserPending: ActionHandler<PendingAction> = (_, action) =>
   console.log(`fetching user: ${action.meta.arg}`);
