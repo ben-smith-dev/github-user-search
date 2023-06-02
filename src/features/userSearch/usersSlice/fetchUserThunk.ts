@@ -132,31 +132,35 @@ export const onFetchUserFulfilled: ActionHandler<FulfilledAction> = (
   };
 };
 
-export const onFetchUserRejected: ActionHandler<RejectedAction> = (
+const onRejectedByCondition: ActionHandler<RejectedAction> = (
   { searchedUsers, rateLimit },
   action
 ) => {
   const searchedUsername = action.meta.arg;
 
-  if (action.meta.condition) {
-    // Failed condition. Place searched user at the start of list.
-    const searchedUser = searchedUsers.find(
-      (user) => user.login === searchedUsername
-    ) as PublicGitHubUser;
+  const searchedUser = searchedUsers.find(
+    (user) => user.login === searchedUsername
+  ) as PublicGitHubUser;
 
-    const otherUsers = searchedUsers.filter(
-      (user) => user.login !== searchedUsername
-    );
+  const otherUsers = searchedUsers.filter(
+    (user) => user.login !== searchedUsername
+  );
 
-    return {
-      searchedUsers: [searchedUser, ...otherUsers],
-      searchResult: {
-        searchedUsername: searchedUsername,
-        user: searchedUser,
-      },
-      rateLimit,
-    };
-  }
+  return {
+    searchedUsers: [searchedUser, ...otherUsers],
+    searchResult: {
+      searchedUsername: searchedUsername,
+      user: searchedUser,
+    },
+    rateLimit,
+  };
+};
+
+const onRejected: ActionHandler<RejectedAction> = (
+  { rateLimit, searchedUsers },
+  action
+) => {
+  const searchedUsername = action.meta.arg;
 
   console.log(`Failed to fetch user ${action.meta.arg}`);
 
@@ -177,4 +181,17 @@ export const onFetchUserRejected: ActionHandler<RejectedAction> = (
     },
     rateLimit,
   };
+};
+
+export const onFetchUserRejected: ActionHandler<RejectedAction> = (
+  sliceState,
+  action
+) => {
+  if (action.meta.condition) {
+    // Failed condition. Place searched user at the start of list.
+
+    return onRejectedByCondition(sliceState, action);
+  }
+
+  return onRejected(sliceState, action);
 };
