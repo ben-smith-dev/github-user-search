@@ -35,8 +35,8 @@ export const UserCardContainer: React.FC<UserCardContainerProps> = ({
       </div>
       <hr />
       <div className={styles.gridContainer}>
-        {users.map((user) => (
-          <div key={user.login} className="centerChildrenHorizontal">
+        {users.map((user, index) => (
+          <div key={index} className="centerChildrenHorizontal">
             <UserCard user={user} />
           </div>
         ))}
