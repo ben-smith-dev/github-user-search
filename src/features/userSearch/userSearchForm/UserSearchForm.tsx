@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../../app/store';
 import { fetchUser } from '../index';
@@ -6,60 +6,48 @@ import { SearchForm } from '../../../common/components';
 
 import styles from './userSearchForm.module.css';
 
-enum InitialAnimationRequiredState {
-  None,
-  InitialRender,
-  NotRequired,
-}
-
-class PatternRequirementPart {
-  constructor(
-    public readonly pattern: RegExp,
-    public readonly message: string
-  ) {}
-}
-
-export const usernamePatternRequirements: PatternRequirementPart[] = [
-  new PatternRequirementPart(
-    new RegExp(/^[a-z\d]/i),
-    'Can only start with a letter or number.'
-  ),
-  new PatternRequirementPart(
-    new RegExp(/^[a-z\d-]+$/i),
-    'Can only include letter, numbers, and hyphens.'
-  ),
-  new PatternRequirementPart(
-    new RegExp(/^(?!.*--)/, 'i'),
-    'Cannot include consecutive hyphens'
-  ),
-  new PatternRequirementPart(
-    new RegExp(/[a-z\d]$/i),
-    'Can only end with a letter or number.'
-  ),
-  new PatternRequirementPart(
-    new RegExp(/^.{1,39}$/),
-    'Has to be 1-39 characters long.'
-  ),
+const usernameRequirements: RegExp[] = [
+  new RegExp(/^[a-z\d]/i), // Can only start with a letter or number.
+  new RegExp(/^[a-z\d-]+$/i), // Can only include letter, numbers, and hyphens.
+  new RegExp(/^(?!.*--)/, 'i'), // Cannot include consecutive hyphens.
+  new RegExp(/[a-z\d]$/i), // Can only end with a letter or number.
+  new RegExp(/^.{1,39}$/), // Has to be 1-39 characters long.
 ];
 
-export const isValidUsername = (username: string): boolean => {
-  // Check search term against username pattern requirements.
-  for (let index = 0; index < usernamePatternRequirements.length; index++) {
-    const { pattern } = usernamePatternRequirements[index];
+const usernameRequirementDescription: string = `
+  Username may only contain alphanumeric characters or single hyphens,
+  and cannot begin or end with a hyphen. Max length of 39 characters.`;
 
-    if (!pattern.test(username)) {
+const isValidUsername = (username: string): boolean => {
+  // Check search term against username pattern requirements.
+  for (let index = 0; index < usernameRequirements.length; index++) {
+    const regex = usernameRequirements[index];
+
+    if (!regex.test(username)) {
       return false;
     }
   }
   return true;
 };
 
+const createRateLimitWarningStyle = (
+  remainingRateLimit: number,
+  playedRateLimitAnimation: boolean
+): string => {
+  const errorStyle: string =
+    playedRateLimitAnimation && styles.rateLimitCardError;
+
+  if (remainingRateLimit <= 0) return `${styles.limitReached} ${errorStyle}`;
+  if (remainingRateLimit <= 10) return styles.limitClose;
+  if (remainingRateLimit <= 30) return styles.warning;
+
+  return '';
+};
+
 export const UserSearchForm: React.FC = () => {
   const userSearch = useRef<HTMLInputElement | null>(null);
+  const playedRateLimitAnimation = useRef<boolean | null>(false);
   const [hasUsernamePatternError, setHasUsernamePatternError] = useState(false);
-  const [addRateLimitAnimation, setAddRateLimitAnimation] = useState(
-    InitialAnimationRequiredState.None
-  );
 
   const dispatch = useDispatch<AppDispatch>();
   const rateLimit = useSelector((state: RootState) => state.users.rateLimit);
@@ -86,36 +74,10 @@ export const UserSearchForm: React.FC = () => {
     }
   };
 
-  useEffect(() => {
-    if (
-      rateLimit &&
-      addRateLimitAnimation === InitialAnimationRequiredState.None
-    ) {
-      setAddRateLimitAnimation(InitialAnimationRequiredState.InitialRender);
-    } else if (
-      addRateLimitAnimation === InitialAnimationRequiredState.InitialRender
-    ) {
-      setAddRateLimitAnimation(InitialAnimationRequiredState.NotRequired);
-    }
-
-    // eslint thinks that we are depending on addRateLimitAnimation to re-render.
-    // eslint-disable-next-line
-  }, [rateLimit]);
-
-  let rateLimitWarningStyle = '';
-  if (rateLimit && rateLimit.remaining <= 0) {
-    rateLimitWarningStyle = `
-      ${
-        !(addRateLimitAnimation === InitialAnimationRequiredState.InitialRender)
-          ? styles.rateLimitCardError
-          : ''
-      }
-      ${styles.limitReached}`;
-  } else if (rateLimit && rateLimit.remaining <= 10) {
-    rateLimitWarningStyle = styles.limitClose;
-  } else if (rateLimit && rateLimit.remaining <= 30) {
-    rateLimitWarningStyle = styles.warning;
-  }
+  let rateLimitWarningStyle: string = createRateLimitWarningStyle(
+    rateLimit?.remaining ?? 0,
+    playedRateLimitAnimation.current ?? false
+  );
 
   return (
     <div className={`${styles.userSearchFormContainer}`}>
@@ -131,26 +93,21 @@ export const UserSearchForm: React.FC = () => {
           ${styles.searchInvalidPopup}
           ${!hasUsernamePatternError && 'visibilityHidden'}`}
         >
-          <p>
-            Username may only contain alphanumeric characters or single hyphens,
-            and cannot begin or end with a hyphen. Max length of 39 characters.
-          </p>
+          <p>{usernameRequirementDescription}</p>
         </div>
       </div>
 
       {rateLimit && (
         <div
           key={searchResult?.searchedUsername}
+          onAnimationEnd={() => {
+            playedRateLimitAnimation.current = true;
+          }}
           className={`
                 centerChildren
                 ${styles.rateLimitCard}
                 ${rateLimitWarningStyle}
-                ${
-                  addRateLimitAnimation ===
-                  InitialAnimationRequiredState.InitialRender
-                    ? styles.easeRateLimitIn
-                    : ''
-                }`}
+                ${!playedRateLimitAnimation.current && styles.easeRateLimitIn}`}
         >
           <p>Remaining</p>
           <p>{rateLimit?.remaining ?? 0}</p>
