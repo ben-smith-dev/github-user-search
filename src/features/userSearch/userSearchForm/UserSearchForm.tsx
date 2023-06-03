@@ -6,12 +6,6 @@ import { SearchForm } from '../../../common/components';
 
 import styles from './userSearchForm.module.css';
 
-enum InitialAnimationRequiredState {
-  None,
-  InitialRender,
-  NotRequired,
-}
-
 class PatternRequirementPart {
   constructor(
     public readonly pattern: RegExp,
@@ -56,10 +50,8 @@ export const isValidUsername = (username: string): boolean => {
 
 export const UserSearchForm: React.FC = () => {
   const userSearch = useRef<HTMLInputElement | null>(null);
+  const playedRateLimitAnimation = useRef<boolean | null>(false);
   const [hasUsernamePatternError, setHasUsernamePatternError] = useState(false);
-  const [addRateLimitAnimation, setAddRateLimitAnimation] = useState(
-    InitialAnimationRequiredState.None
-  );
 
   const dispatch = useDispatch<AppDispatch>();
   const rateLimit = useSelector((state: RootState) => state.users.rateLimit);
@@ -86,31 +78,11 @@ export const UserSearchForm: React.FC = () => {
     }
   };
 
-  useEffect(() => {
-    if (
-      rateLimit &&
-      addRateLimitAnimation === InitialAnimationRequiredState.None
-    ) {
-      setAddRateLimitAnimation(InitialAnimationRequiredState.InitialRender);
-    } else if (
-      addRateLimitAnimation === InitialAnimationRequiredState.InitialRender
-    ) {
-      setAddRateLimitAnimation(InitialAnimationRequiredState.NotRequired);
-    }
-
-    // eslint thinks that we are depending on addRateLimitAnimation to re-render.
-    // eslint-disable-next-line
-  }, [rateLimit]);
-
   let rateLimitWarningStyle = '';
   if (rateLimit && rateLimit.remaining <= 0) {
-    rateLimitWarningStyle = `
-      ${
-        !(addRateLimitAnimation === InitialAnimationRequiredState.InitialRender)
-          ? styles.rateLimitCardError
-          : ''
-      }
-      ${styles.limitReached}`;
+    rateLimitWarningStyle = `${styles.limitReached} ${
+      playedRateLimitAnimation.current && styles.rateLimitCardError
+    }`;
   } else if (rateLimit && rateLimit.remaining <= 10) {
     rateLimitWarningStyle = styles.limitClose;
   } else if (rateLimit && rateLimit.remaining <= 30) {
@@ -141,16 +113,14 @@ export const UserSearchForm: React.FC = () => {
       {rateLimit && (
         <div
           key={searchResult?.searchedUsername}
+          onAnimationEnd={() => {
+            playedRateLimitAnimation.current = true;
+          }}
           className={`
                 centerChildren
                 ${styles.rateLimitCard}
                 ${rateLimitWarningStyle}
-                ${
-                  addRateLimitAnimation ===
-                  InitialAnimationRequiredState.InitialRender
-                    ? styles.easeRateLimitIn
-                    : ''
-                }`}
+                ${!playedRateLimitAnimation.current && styles.easeRateLimitIn}`}
         >
           <p>Remaining</p>
           <p>{rateLimit?.remaining ?? 0}</p>
