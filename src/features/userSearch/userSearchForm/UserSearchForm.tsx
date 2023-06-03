@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../../app/store';
 import { fetchUser } from '../index';
@@ -6,46 +6,38 @@ import { SearchForm } from '../../../common/components';
 
 import styles from './userSearchForm.module.css';
 
-class PatternRequirementPart {
-  constructor(
-    public readonly pattern: RegExp,
-    public readonly message: string
-  ) {}
-}
-
-export const usernamePatternRequirements: PatternRequirementPart[] = [
-  new PatternRequirementPart(
-    new RegExp(/^[a-z\d]/i),
-    'Can only start with a letter or number.'
-  ),
-  new PatternRequirementPart(
-    new RegExp(/^[a-z\d-]+$/i),
-    'Can only include letter, numbers, and hyphens.'
-  ),
-  new PatternRequirementPart(
-    new RegExp(/^(?!.*--)/, 'i'),
-    'Cannot include consecutive hyphens'
-  ),
-  new PatternRequirementPart(
-    new RegExp(/[a-z\d]$/i),
-    'Can only end with a letter or number.'
-  ),
-  new PatternRequirementPart(
-    new RegExp(/^.{1,39}$/),
-    'Has to be 1-39 characters long.'
-  ),
+const usernameRequirements: RegExp[] = [
+  new RegExp(/^[a-z\d]/i), // Can only start with a letter or number.
+  new RegExp(/^[a-z\d-]+$/i), // Can only include letter, numbers, and hyphens.
+  new RegExp(/^(?!.*--)/, 'i'), // Cannot include consecutive hyphens.
+  new RegExp(/[a-z\d]$/i), // Can only end with a letter or number.
+  new RegExp(/^.{1,39}$/), // Has to be 1-39 characters long.
 ];
 
-export const isValidUsername = (username: string): boolean => {
+const isValidUsername = (username: string): boolean => {
   // Check search term against username pattern requirements.
-  for (let index = 0; index < usernamePatternRequirements.length; index++) {
-    const { pattern } = usernamePatternRequirements[index];
+  for (let index = 0; index < usernameRequirements.length; index++) {
+    const regex = usernameRequirements[index];
 
-    if (!pattern.test(username)) {
+    if (!regex.test(username)) {
       return false;
     }
   }
   return true;
+};
+
+const createRateLimitWarningStyle = (
+  remainingRateLimit: number,
+  playedRateLimitAnimation: boolean
+): string => {
+  const errorStyle: string =
+    playedRateLimitAnimation && styles.rateLimitCardError;
+
+  if (remainingRateLimit <= 0) return `${styles.limitReached} ${errorStyle}`;
+  if (remainingRateLimit <= 10) return styles.limitClose;
+  if (remainingRateLimit <= 30) return styles.warning;
+
+  return '';
 };
 
 export const UserSearchForm: React.FC = () => {
@@ -78,16 +70,10 @@ export const UserSearchForm: React.FC = () => {
     }
   };
 
-  let rateLimitWarningStyle = '';
-  if (rateLimit && rateLimit.remaining <= 0) {
-    rateLimitWarningStyle = `${styles.limitReached} ${
-      playedRateLimitAnimation.current && styles.rateLimitCardError
-    }`;
-  } else if (rateLimit && rateLimit.remaining <= 10) {
-    rateLimitWarningStyle = styles.limitClose;
-  } else if (rateLimit && rateLimit.remaining <= 30) {
-    rateLimitWarningStyle = styles.warning;
-  }
+  let rateLimitWarningStyle: string = createRateLimitWarningStyle(
+    rateLimit?.remaining ?? 0,
+    playedRateLimitAnimation.current ?? false
+  );
 
   return (
     <div className={`${styles.userSearchFormContainer}`}>
