@@ -14,6 +14,10 @@ const usernameRequirements: RegExp[] = [
   new RegExp(/^.{1,39}$/), // Has to be 1-39 characters long.
 ];
 
+const usernameRequirementDescription: string = `
+  Username may only contain alphanumeric characters or single hyphens,
+  and cannot begin or end with a hyphen. Max length of 39 characters.`;
+
 const isValidUsername = (username: string): boolean => {
   // Check search term against username pattern requirements.
   for (let index = 0; index < usernameRequirements.length; index++) {
@@ -89,10 +93,7 @@ export const UserSearchForm: React.FC = () => {
           ${styles.searchInvalidPopup}
           ${!hasUsernamePatternError && 'visibilityHidden'}`}
         >
-          <p>
-            Username may only contain alphanumeric characters or single hyphens,
-            and cannot begin or end with a hyphen. Max length of 39 characters.
-          </p>
+          <p>{usernameRequirementDescription}</p>
         </div>
       </div>
 
