@@ -1,28 +1,3 @@
-html,
-body,
-#root,
-main {
-  height: 100%;
-  width: 100%;
-
-  margin: 0rem;
-  padding: 0rem;
-  box-sizing: border-box;
-}
-
-.appContainer {
-  width: 100%;
-  height: 100%;
-
-  overflow-inline: scroll;
-
-  display: grid;
-  grid-template-rows: auto 1fr 5rem;
-}
-
-.appContainer > main {
-  padding: 0rem 0.25rem;
-}
 /* Utility Classes */
 
 .centerChildrenHorizontal {
