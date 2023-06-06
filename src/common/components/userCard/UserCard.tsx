@@ -5,7 +5,7 @@ export interface UserCardProps {
 }
 
 export const UserCard: React.FC<UserCardProps> = ({ user }: UserCardProps) => {
-  const joinedDate = new Date(user?.created_at ?? '');
+  const joinedDate = new Date(user?.created_at ?? '0001');
   const joinedYear = joinedDate.getFullYear();
 
   return (
@@ -45,9 +45,9 @@ export const UserCard: React.FC<UserCardProps> = ({ user }: UserCardProps) => {
           className={`flex flex-col items-center gap-2
           @[36rem]:flex-row @[36rem]:gap-4 @[36rem]:justify-between`}
         >
-          <p>{`Followers: ${user?.followers}`}</p>
-          <p>{`Following: ${user?.following}`}</p>
-          <p>{`Repos: ${user?.public_repos}`}</p>
+          <p>{`Followers: ${user?.followers ?? 0}`}</p>
+          <p>{`Following: ${user?.following ?? 0}`}</p>
+          <p>{`Repos: ${user?.public_repos ?? 0}`}</p>
           <p>{`Joined: ${joinedYear}`}</p>
         </div>
       </a>
