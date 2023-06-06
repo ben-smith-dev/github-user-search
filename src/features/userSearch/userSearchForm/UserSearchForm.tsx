@@ -4,8 +4,6 @@ import { AppDispatch, RootState } from '../../../app/store';
 import { fetchUser } from '../index';
 import { SearchForm } from '../../../common/components';
 
-import styles from './userSearchForm.module.css';
-
 const usernameRequirements: RegExp[] = [
   new RegExp(/^[a-z\d]/i), // Can only start with a letter or number.
   new RegExp(/^[a-z\d-]+$/i), // Can only include letter, numbers, and hyphens.
@@ -35,13 +33,16 @@ const createRateLimitWarningStyle = (
   playedRateLimitAnimation: boolean
 ): string => {
   const errorStyle: string =
-    playedRateLimitAnimation && styles.rateLimitCardError;
+    (playedRateLimitAnimation && 'animate-h-shake') || '';
 
-  if (remainingRateLimit <= 0) return `${styles.limitReached} ${errorStyle}`;
-  if (remainingRateLimit <= 10) return styles.limitClose;
-  if (remainingRateLimit <= 30) return styles.warning;
+  if (remainingRateLimit <= 0)
+    return `${'border-red-500 text-red-500'} ${errorStyle}`;
 
-  return '';
+  if (remainingRateLimit <= 10) return 'border-orange-500 text-orange-500';
+
+  if (remainingRateLimit <= 30) return 'border-yellow-500 text-yellow-500';
+
+  return 'border-black text-black';
 };
 
 export const UserSearchForm: React.FC = () => {
@@ -80,8 +81,8 @@ export const UserSearchForm: React.FC = () => {
   );
 
   return (
-    <div className={`${styles.userSearchFormContainer}`}>
-      <div className={`centerChildren ${styles.search}`}>
+    <div className="w-full h-[3rem] flex gap-2">
+      <div className="w-full h-full relative">
         <SearchForm
           onSubmit={onSubmit}
           searchRef={userSearch}
@@ -90,8 +91,8 @@ export const UserSearchForm: React.FC = () => {
 
         <div
           className={`
-          ${styles.searchInvalidPopup}
-          ${!hasUsernamePatternError && 'visibilityHidden'}`}
+          absolute top-[3.5rem] left-0 z-10 p-2 w-[75vw] min-w-[25ch] max-w-[40ch] bg-white border-red-500 border-2 rounded-md
+          ${!hasUsernamePatternError && 'hidden'}`}
         >
           <p>{usernameRequirementDescription}</p>
         </div>
@@ -104,10 +105,12 @@ export const UserSearchForm: React.FC = () => {
             playedRateLimitAnimation.current = true;
           }}
           className={`
-                centerChildren
-                ${styles.rateLimitCard}
-                ${rateLimitWarningStyle}
-                ${!playedRateLimitAnimation.current && styles.easeRateLimitIn}`}
+                h-full flex flex-col justify-center items-center p-4 border-2 rounded-md [contain:content]
+                ${!playedRateLimitAnimation.current && 'animate-w-scale-in'}
+                ${createRateLimitWarningStyle(
+                  rateLimit?.remaining,
+                  playedRateLimitAnimation?.current ?? false
+                )}`}
         >
           <p>Remaining</p>
           <p>{rateLimit?.remaining ?? 0}</p>
