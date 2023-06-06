@@ -4,11 +4,9 @@ import { RootState } from '../../../app/store';
 import { UserCard } from '../../../common/components';
 import { UserSearchForm } from '../index';
 
-import styles from './searchedUserContainer.module.css';
-
 export const SearchedUserContainer: React.FC = () => {
   const [hadPreviousUser, setHadPreviousUser] = useState(false);
-  const [fadeOutStyle, setFadeOutStyle] = useState('');
+  const [fadeOutStyle, setFadeOutStyle] = useState('[visibility:hidden]');
 
   const searchResult = useSelector((state: RootState) => {
     return state.users.searchResult;
@@ -16,21 +14,21 @@ export const SearchedUserContainer: React.FC = () => {
 
   useEffect(() => {
     setHadPreviousUser((prev) => {
-      setFadeOutStyle(prev ? styles.scaleVisibilityOut : '');
+      setFadeOutStyle(prev ? 'animate-visibility-out' : '[visibility:hidden]');
 
       return searchResult?.user != null;
     });
   }, [searchResult]);
 
   return (
-    <div className={styles.searchedUserContainer}>
-      <div className={`${styles.userSearchForm}`}>
+    <div className="w-full">
+      <div className=" w-[90%] min-w-fit max-w-[100ch] m-auto">
         <UserSearchForm />
 
         <div
           className={`
-            ${styles.searchResultText} 
-            ${!searchResult && 'visibilityHidden'}`}
+            flex justify-between flex-wrap py-1
+            ${!searchResult && '[visibility:hidden]'}`}
         >
           <p>Showing result for: {searchResult?.searchedUsername}</p>
 
@@ -40,9 +38,12 @@ export const SearchedUserContainer: React.FC = () => {
 
       <div
         className={`
-          centerChildrenHorizontal 
-          ${!hadPreviousUser && 'visibilityHidden'}
-          ${searchResult?.user ? styles.scaleVisibilityIn : fadeOutStyle}`}
+          flex flex-col justify-center items-center
+          ${
+            searchResult?.user !== undefined
+              ? 'animate-scale-visibility-in'
+              : fadeOutStyle
+          }`}
       >
         <UserCard user={searchResult?.user ?? null} />
       </div>
