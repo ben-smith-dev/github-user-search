@@ -75,11 +75,6 @@ export const UserSearchForm: React.FC = () => {
     }
   };
 
-  let rateLimitWarningStyle: string = createRateLimitWarningStyle(
-    rateLimit?.remaining ?? 0,
-    playedRateLimitAnimation.current ?? false
-  );
-
   return (
     <div className="w-full h-[3rem] flex gap-2">
       <div className="w-full h-full relative">
