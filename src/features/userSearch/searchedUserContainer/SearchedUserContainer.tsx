@@ -21,7 +21,7 @@ export const SearchedUserContainer: React.FC = () => {
   }, [searchResult]);
 
   return (
-    <div className="w-full">
+    <div className="w-full flex flex-col justify-center">
       <div className=" w-[90%] min-w-fit max-w-[100ch] m-auto">
         <UserSearchForm />
 
@@ -38,7 +38,7 @@ export const SearchedUserContainer: React.FC = () => {
 
       <div
         className={`
-          flex flex-col justify-center items-center
+           w-full
           ${
             searchResult?.user !== undefined
               ? 'animate-scale-visibility-in'
