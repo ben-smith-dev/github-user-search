@@ -5,6 +5,8 @@ import { UserCard } from '../../../common/components';
 import { UserSearchForm } from '../index';
 
 export const SearchedUserContainer: React.FC = () => {
+  // Disable eslint incase this state variable is needed later.
+  // eslint-disable-next-line
   const [hadPreviousUser, setHadPreviousUser] = useState(false);
   const [fadeOutStyle, setFadeOutStyle] = useState('[visibility:hidden]');
 
