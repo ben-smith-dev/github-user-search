@@ -32,6 +32,7 @@ export const SearchedUserContainer: React.FC = () => {
         <div
           className={`
             flex justify-between flex-wrap py-1
+            dark:text-gray-400
             ${!searchResult && '[visibility:hidden]'}`}
         >
           <p>Showing result for: {searchResult?.searchedUsername}</p>

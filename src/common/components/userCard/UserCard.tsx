@@ -14,10 +14,13 @@ export const UserCard: React.FC<UserCardProps> = ({ user }: UserCardProps) => {
         href={user?.html_url}
         target="_blank"
         rel="noreferrer"
-        className="w-full min-w-[10ch] max-w-[60ch] h-fit m-auto p-4 [contain:content]
-        rounded-md bg-gray-700 text-white
-        transition-transform ease-in-out delay-100
-        hover:scale-105 focus:scale-105"
+        className="w-full min-w-[10ch] max-w-[60ch] h-fit m-auto p-4 [contain:content] bg-transparent rounded-md border-2
+        border-black
+        dark:text-gray-400 dark:border-gray-400
+
+          transition-all ease-in-out delay-100
+          hover:scale-105 hover:shadow-lg
+          focus:scale-105 focus:shadow-lg"
       >
         <div
           className={`h-fit flex flex-col items-center gap-1
@@ -26,7 +29,9 @@ export const UserCard: React.FC<UserCardProps> = ({ user }: UserCardProps) => {
           <img
             src={user?.avatar_url}
             alt="Users GitHub avatar."
-            className="h-[6rem] object-contain rounded-md"
+            className="h-[6rem] object-contain rounded-md
+              bg-[#0000000a]
+              dark:bg-[#ffffff0a]"
           />
           <div
             className={`text-center text-[1.5em] h-fit
