@@ -33,12 +33,13 @@ export const UserCardContainer: React.FC<UserCardContainerProps> = ({
             border-red-600
             hover:bg-red-600 hover:text-white
             focus:bg-red-600 focus:text-white
-            disabled:text-gray-700 disabled:border-black
+            disabled:text-gray-700 disabled:border-black disabled:pointer-events-none
 
             dark:border-red-800
             dark:hover:bg-red-800 dark:hover:text-gray-100
             dark:focus:bg-red-800 dark:focus:text-gray-100
             dark:active:bg-red-700 dark:active:border-red-700
+            
             dark:disabled:text-inherit dark:disabled:border-gray-400"
         >
           {clearContainerPrompt}
