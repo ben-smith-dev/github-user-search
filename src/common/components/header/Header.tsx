@@ -1,9 +1,7 @@
-import styles from './header.module.css';
-
 export const Header: React.FC = () => {
   return (
-    <header className={styles.header}>
-      <h1>GitHub User Search</h1>
+    <header className="h-20 flex flex-col justify-center items-center">
+      <h1 className="text-[2em]">GitHub User Search</h1>
     </header>
   );
 };
