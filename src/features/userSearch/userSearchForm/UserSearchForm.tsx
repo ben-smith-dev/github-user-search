@@ -100,7 +100,7 @@ export const UserSearchForm: React.FC = () => {
           className={`
           absolute top-[3.5rem] left-0 z-10 p-3 w-[75vw] min-w-[25ch] max-w-[40ch] border-2 rounded-md 
           bg-white border-red-500 shadow-xl
-          dark:bg-gray-900 dark:text-gray-300 dark:border-red-800
+          dark:bg-gray-950 dark:text-gray-300 dark:border-red-800
           ${!hasUsernamePatternError && 'hidden'}`}
         >
           <p>{usernameRequirementDescription}</p>
