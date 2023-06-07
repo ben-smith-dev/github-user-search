@@ -16,7 +16,9 @@ export const SearchedUserContainer: React.FC = () => {
 
   useEffect(() => {
     setHadPreviousUser((prev) => {
-      setFadeOutStyle(prev ? 'animate-visibility-out' : '[visibility:hidden]');
+      setFadeOutStyle(
+        prev ? 'animate-scale-visibility-out' : '[visibility:hidden]'
+      );
 
       return searchResult?.user != null;
     });
