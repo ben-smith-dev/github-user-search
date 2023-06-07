@@ -89,7 +89,7 @@ export const fetchUser = createAsyncThunk<
     condition: (username: string, { getState }) => {
       const { users } = getState();
       const hasUserWithUsername: boolean = users.searchedUsers.some(
-        (user) => user.login === username
+        (user) => user.login.toLowerCase() === username.toLowerCase()
       );
 
       // return false to cancel action.
@@ -139,11 +139,11 @@ const onRejectedByCondition: ActionHandler<RejectedAction> = (
   const searchedUsername = action.meta.arg;
 
   const searchedUser = searchedUsers.find(
-    (user) => user.login === searchedUsername
+    (user) => user.login.toLowerCase() === searchedUsername.toLowerCase()
   ) as PublicGitHubUser;
 
   const otherUsers = searchedUsers.filter(
-    (user) => user.login !== searchedUsername
+    (user) => user.login.toLowerCase() !== searchedUsername.toLowerCase()
   );
 
   return {
