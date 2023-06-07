@@ -36,13 +36,25 @@ const createRateLimitWarningStyle = (
     (playedRateLimitAnimation && 'animate-h-shake') || '';
 
   if (remainingRateLimit <= 0)
-    return `${'border-red-500 text-red-500'} ${errorStyle}`;
+    return `
+    ${`
+      border-red-500 text-red-500 
+      dark:border-red-800 dark:text-red-800`}
+    ${errorStyle}`;
 
-  if (remainingRateLimit <= 10) return 'border-orange-500 text-orange-500';
+  if (remainingRateLimit <= 10)
+    return `
+      border-orange-500 text-orange-500
+      dark:border-orange-800 dark:text-orange-800`;
 
-  if (remainingRateLimit <= 30) return 'border-yellow-500 text-yellow-500';
+  if (remainingRateLimit <= 30)
+    return `
+      border-yellow-500 text-yellow-500
+      dark:border-yellow-600 dark:text-yellow-600`;
 
-  return 'border-black text-black';
+  return `
+    border-black text-black
+    dark:border-gray-400 dark:text-gray-400`;
 };
 
 export const UserSearchForm: React.FC = () => {
@@ -86,7 +98,9 @@ export const UserSearchForm: React.FC = () => {
 
         <div
           className={`
-          absolute top-[3.5rem] left-0 z-10 p-2 w-[75vw] min-w-[25ch] max-w-[40ch] bg-white border-red-500 border-2 rounded-md
+          absolute top-[3.5rem] left-0 z-10 p-3 w-[75vw] min-w-[25ch] max-w-[40ch] border-2 rounded-md 
+          bg-white border-red-500 shadow-xl
+          dark:bg-gray-950 dark:text-gray-300 dark:border-red-800
           ${!hasUsernamePatternError && 'hidden'}`}
         >
           <p>{usernameRequirementDescription}</p>
