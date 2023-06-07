@@ -46,13 +46,14 @@ export const UserCardContainer: React.FC<UserCardContainerProps> = ({
         </button>
       </div>
       <hr className="dark:border-gray-600" />
-      <div className="w-full grid [grid-template-columns:repeat(auto-fit,_minmax(20ch,_70ch))] justify-center gap-4 my-2">
+
+      <ol className="w-full grid [grid-template-columns:repeat(auto-fit,_minmax(20ch,_70ch))] justify-center gap-4 my-2">
         {users.map((user) => (
-          <div key={user.id} className="w-full">
+          <li key={user.id} className="w-full">
             <UserCard user={user} />
-          </div>
+          </li>
         ))}
-      </div>
+      </ol>
     </div>
   );
 };
