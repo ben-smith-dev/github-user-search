@@ -18,11 +18,11 @@ export const StoredUsersContainer: React.FC = () => {
   };
 
   return (
-    <div className="fillParentWidth">
+    <div>
       <UserCardContainer
         users={users}
         title="Recent Searches"
-        clearContainerPrompt="Clear Cached Users"
+        clearContainerPrompt="Clear Recent Searches"
         clearContainer={clearContainerHandler}
       />
     </div>
