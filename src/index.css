@@ -6,4 +6,8 @@
   *:focus {
     outline: darkblue solid 3px;
   }
+
+  body {
+    background-color: #030712; /* Tailwind gray-950*/
+  }
 }
