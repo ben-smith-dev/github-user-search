@@ -14,6 +14,7 @@ export interface SliceState {
   searchedUsers: PublicGitHubUser[];
   searchResult: {
     searchedUsername: string;
+    status: 'fetching' | 'error' | 'found';
     user?: PublicGitHubUser;
     error?: SerializedError;
   } | null;
