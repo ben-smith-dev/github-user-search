@@ -17,7 +17,7 @@ export const UserCardContainer: React.FC<UserCardContainerProps> = ({
   const hasUsers: boolean = 0 < users.length;
 
   return (
-    <div className="@container w-full min-w-[35ch] my-4">
+    <div className="@container w-full min-w-[35ch] min-h-[10rem] my-4">
       <div
         className="flex justify-between items-end p-2
           dark:text-gray-400"
@@ -47,13 +47,19 @@ export const UserCardContainer: React.FC<UserCardContainerProps> = ({
       </div>
       <hr className="dark:border-gray-600" />
 
-      <ol className="w-full grid [grid-template-columns:repeat(auto-fit,_minmax(20ch,_70ch))] justify-center gap-4 my-2">
-        {users.map((user) => (
-          <li key={user.id} className="w-full">
-            <UserCard user={user} />
-          </li>
-        ))}
-      </ol>
+      {users.length <= 0 ? (
+        <div className="w-fit h-fit my-10 m-auto flex justify-center items-center">
+          <p className="text-gray-500 text-xl">Empty</p>
+        </div>
+      ) : (
+        <ol className="w-full grid [grid-template-columns:repeat(auto-fit,_minmax(20ch,_70ch))] justify-center gap-4 my-2">
+          {users.map((user) => (
+            <li key={user.id} className="w-full">
+              <UserCard user={user} />
+            </li>
+          ))}
+        </ol>
+      )}
     </div>
   );
 };
