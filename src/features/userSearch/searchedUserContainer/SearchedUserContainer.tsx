@@ -43,7 +43,7 @@ export const SearchedUserContainer: React.FC = () => {
             }`}
             title="No user found."
           >
-            <UserCardSkeleton enableAnimation={false} />
+            <UserCardSkeleton isError={true} />
           </div>
         )}
       </div>
