@@ -18,7 +18,7 @@ export const UserCard: React.FC<UserCardProps> = ({ user }: UserCardProps) => {
         border-black
         dark:text-gray-400 dark:border-gray-400
 
-          transition-all ease-in-out delay-100
+          transition-transform ease-in-out delay-200
           hover:scale-105 hover:shadow-lg
           focus:scale-105 focus:shadow-lg"
       >
@@ -29,9 +29,8 @@ export const UserCard: React.FC<UserCardProps> = ({ user }: UserCardProps) => {
           <img
             src={user?.avatar_url}
             alt="Users GitHub avatar."
-            className="h-[6rem] object-contain rounded-md
-              bg-[#0000000a]
-              dark:bg-[#ffffff0a]"
+            className="h-[6rem] object-contain rounded-md bg-gray-400
+              dark:brightness-75"
           />
           <div
             className={`text-center text-[1.5em] h-fit
