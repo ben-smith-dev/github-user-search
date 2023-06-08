@@ -34,8 +34,8 @@ export const SearchedUserContainer: React.FC = () => {
       <div className={`w-full`}>
         {searchResult?.status === 'fetching' ? (
           <UserCardSkeleton />
-        ) : searchResult?.user ? (
-          <UserCard user={searchResult?.user ?? null} />
+        ) : searchResult?.status === 'found' ? (
+          <UserCard user={searchResult.user} />
         ) : (
           <div
             className={`${
