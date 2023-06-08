@@ -18,7 +18,7 @@ export const UserCard: React.FC<UserCardProps> = ({ user }: UserCardProps) => {
         border-black
         dark:text-gray-400 dark:border-gray-400
 
-          transition-all ease-in-out delay-100
+          transition-transform ease-in-out delay-200
           hover:scale-105 hover:shadow-lg
           focus:scale-105 focus:shadow-lg"
       >
