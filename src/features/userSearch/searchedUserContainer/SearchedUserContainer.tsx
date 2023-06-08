@@ -21,7 +21,13 @@ export const SearchedUserContainer: React.FC = () => {
         >
           <p>Showing result for: {searchResult?.searchedUsername}</p>
 
-          <p>{searchResult?.user ? 'user found' : 'no user found'}</p>
+          <p>
+            {searchResult?.status === 'found'
+              ? 'user found'
+              : searchResult?.status === 'fetching'
+              ? 'fetching user'
+              : 'no user found'}
+          </p>
         </div>
       </div>
 
