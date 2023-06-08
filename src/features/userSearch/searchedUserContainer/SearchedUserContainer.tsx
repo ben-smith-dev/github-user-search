@@ -41,7 +41,11 @@ export const SearchedUserContainer: React.FC = () => {
             className={`${
               searchResult === null ? '[visibility:hidden]' : 'animate-h-shake'
             }`}
-            title="No user found."
+            title={
+              searchResult?.searchedUsername
+                ? `${searchResult.searchedUsername} not found.`
+                : 'User not found.'
+            }
           >
             <UserCardSkeleton isError={true} />
           </div>
