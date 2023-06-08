@@ -7,8 +7,6 @@ interface UserCardSkeletonProps {
 export const UserCardSkeleton: React.FC<UserCardSkeletonProps> = ({
   enableAnimation = true,
 }) => {
-  console.log(enableAnimation);
-
   return (
     <div className="@container w-full h-full p-2 flex justify-center items-center">
       <div
