@@ -1,28 +1,12 @@
 import { useSelector } from 'react-redux';
-import { useEffect, useState } from 'react';
 import { RootState } from '../../../app/store';
-import { UserCard } from '../../../common/components';
+import { UserCard, UserCardSkeleton } from '../../../common/components';
 import { UserSearchForm } from '../index';
 
 export const SearchedUserContainer: React.FC = () => {
-  // Disable eslint incase this state variable is needed later.
-  // eslint-disable-next-line
-  const [hadPreviousUser, setHadPreviousUser] = useState(false);
-  const [fadeOutStyle, setFadeOutStyle] = useState('[visibility:hidden]');
-
   const searchResult = useSelector((state: RootState) => {
     return state.users.searchResult;
   });
-
-  useEffect(() => {
-    setHadPreviousUser((prev) => {
-      setFadeOutStyle(
-        prev ? 'animate-scale-visibility-out' : '[visibility:hidden]'
-      );
-
-      return searchResult?.user != null;
-    });
-  }, [searchResult]);
 
   return (
     <div className="w-full flex flex-col justify-center">
@@ -37,20 +21,40 @@ export const SearchedUserContainer: React.FC = () => {
         >
           <p>Showing result for: {searchResult?.searchedUsername}</p>
 
-          <p>{searchResult?.user ? 'user found' : 'no user found'}</p>
+          <p>
+            {searchResult?.status === 'found'
+              ? 'user found'
+              : searchResult?.status === 'fetching'
+              ? 'fetching user'
+              : 'no user found'}
+          </p>
         </div>
       </div>
 
-      <div
-        className={`
-           w-full
-          ${
-            searchResult?.user !== undefined
-              ? 'animate-scale-visibility-in'
-              : fadeOutStyle
-          }`}
-      >
-        <UserCard user={searchResult?.user ?? null} />
+      <div className={`w-full`}>
+        {searchResult?.status === 'fetching' ? (
+          <div
+            title={`fetching ${searchResult.searchedUsername}.`}
+            className="cursor-wait"
+          >
+            <UserCardSkeleton />
+          </div>
+        ) : searchResult?.status === 'found' ? (
+          <UserCard user={searchResult.user} />
+        ) : (
+          <div
+            className={`${
+              searchResult === null ? '[visibility:hidden]' : 'animate-h-shake'
+            }`}
+            title={
+              searchResult?.searchedUsername
+                ? `${searchResult.searchedUsername} not found.`
+                : 'User not found.'
+            }
+          >
+            <UserCardSkeleton isError={true} />
+          </div>
+        )}
       </div>
     </div>
   );

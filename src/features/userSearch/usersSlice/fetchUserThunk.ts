@@ -99,8 +99,20 @@ export const fetchUser = createAsyncThunk<
   }
 );
 
-export const onFetchUserPending: ActionHandler<PendingAction> = (_, action) =>
+export const onFetchUserPending: ActionHandler<PendingAction> = (
+  state,
+  action
+) => {
   console.log(`fetching user: ${action.meta.arg}`);
+
+  return {
+    ...state,
+    searchResult: {
+      searchedUsername: action.meta.arg,
+      status: 'fetching',
+    },
+  };
+};
 
 export const onFetchUserFulfilled: ActionHandler<FulfilledAction> = (
   { searchedUsers },
@@ -127,6 +139,7 @@ export const onFetchUserFulfilled: ActionHandler<FulfilledAction> = (
     searchResult: {
       searchedUsername: username,
       user: searchedUser,
+      status: 'found',
     },
     rateLimit: action.payload.rateLimit,
   };
@@ -151,6 +164,7 @@ const onRejectedByCondition: ActionHandler<RejectedAction> = (
     searchResult: {
       searchedUsername: searchedUsername,
       user: searchedUser,
+      status: 'found',
     },
     rateLimit,
   };
@@ -178,6 +192,7 @@ const onRejected: ActionHandler<RejectedAction> = (
     searchResult: {
       searchedUsername: searchedUsername,
       error: action.error,
+      status: 'error',
     },
     rateLimit,
   };

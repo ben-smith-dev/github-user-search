@@ -46,7 +46,7 @@ export interface RateLimit {
 }
 
 export interface PublicGitHubApiResult<T> {
-  data?: T;
+  data: T;
   rateLimit: RateLimit;
 }
 

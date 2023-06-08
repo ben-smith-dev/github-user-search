@@ -10,13 +10,29 @@ import {
   onFetchUserRejected,
 } from './fetchUserThunk';
 
+export type SearchResult<T extends 'fetching' | 'error' | 'found'> =
+  T extends 'fetching'
+    ? {
+        searchedUsername: string;
+        status: 'fetching';
+      }
+    : T extends 'error'
+    ? {
+        searchedUsername: string;
+        status: 'error';
+        error: SerializedError;
+      }
+    : T extends 'found'
+    ? {
+        searchedUsername: string;
+        status: 'found';
+        user: PublicGitHubUser;
+      }
+    : never;
+
 export interface SliceState {
   searchedUsers: PublicGitHubUser[];
-  searchResult: {
-    searchedUsername: string;
-    user?: PublicGitHubUser;
-    error?: SerializedError;
-  } | null;
+  searchResult: SearchResult<'fetching' | 'error' | 'found'> | null;
   rateLimit: RateLimit | null;
 }
 
