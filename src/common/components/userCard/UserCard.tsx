@@ -30,7 +30,7 @@ export const UserCard: React.FC<UserCardProps> = ({ user }: UserCardProps) => {
             src={user?.avatar_url}
             alt="Users GitHub avatar."
             className="h-[6rem] object-contain rounded-md bg-gray-400
-              dark:brightness-75"
+              dark:brightness-90"
           />
           <div
             className={`text-center text-[1.5em] h-fit
