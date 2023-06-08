@@ -3,8 +3,6 @@ import { Header, Footer } from '../common/components';
 import { Home, PageNotFound } from '../common/pages';
 
 const App: React.FC = () => {
-  console.log('app rerendered.');
-
   return (
     <div className="min-w-screen min-h-screen grid grid-rows-[5rem_1fr_5rem] overflow-scroll dark:bg-gray-950">
       <Header />
