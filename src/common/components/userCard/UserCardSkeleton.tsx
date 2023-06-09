@@ -21,8 +21,6 @@ export const UserCardSkeleton: React.FC<UserCardSkeletonProps> = ({
             ? 'dark:text-gray-400 dark:border-gray-400'
             : 'dark:border-red-800'
         }
-        
-
           transition-transform ease-in-out delay-200
           hover:scale-105 hover:shadow-lg
           focus:scale-105 focus:shadow-lg`}

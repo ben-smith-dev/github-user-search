@@ -31,7 +31,7 @@ export const SearchedUserContainer: React.FC = () => {
         </div>
       </div>
 
-      <div className={`w-full`}>
+      <div className="w-full overflow-x-hidden">
         {searchResult?.status === 'fetching' ? (
           <div
             title={`fetching ${searchResult.searchedUsername}.`}

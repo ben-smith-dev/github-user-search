@@ -1,45 +1,39 @@
 import { ReactNode } from 'react';
-import { SkeletonTheme } from 'react-loading-skeleton';
+import { SkeletonStyleProps } from 'react-loading-skeleton';
 import { SkeletonScheme } from './SkeletonScheme';
 
 export interface SkeletonErrorProps {
   isError: boolean;
-  skeletonColor?: string;
   children: ReactNode;
 }
+
+const errorLightModeStyle: SkeletonStyleProps = {
+  baseColor: '#dc2626', //Tailwind red-600
+  highlightColor: 'none',
+  enableAnimation: false,
+};
+
+const errorDarkModeStyle: SkeletonStyleProps = {
+  baseColor: '#991b1b', //Tailwind red-800
+  highlightColor: 'none',
+  enableAnimation: false,
+};
 
 export const SkeletonError: React.FC<SkeletonErrorProps> = ({
   isError,
   children,
 }) => {
   return (
-    <div>
-      {!isError ? (
-        children
+    <>
+      {isError ? (
+        <SkeletonScheme
+          lightModeStyle={errorLightModeStyle}
+          darkModeStyle={errorDarkModeStyle}
+          children={children}
+        />
       ) : (
-        <div>
-          <SkeletonScheme
-            lightSchemeChildren={
-              <SkeletonTheme
-                baseColor={'#dc2626' /*Tailwind red-600 */}
-                highlightColor={'none'}
-                enableAnimation={false}
-              >
-                {children}
-              </SkeletonTheme>
-            }
-            darkSchemeChildren={
-              <SkeletonTheme
-                baseColor={'#991b1b' /*Tailwind red-800 */}
-                highlightColor={'none'}
-                enableAnimation={false}
-              >
-                {children}
-              </SkeletonTheme>
-            }
-          />
-        </div>
+        <SkeletonScheme children={children} />
       )}
-    </div>
+    </>
   );
 };
