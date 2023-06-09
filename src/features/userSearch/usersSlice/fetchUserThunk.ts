@@ -79,8 +79,11 @@ export const fetchUser = createAsyncThunk<
         return rejectWithValue({
           rateLimit,
         });
+      } else if (error instanceof Error) {
+        console.log(error);
       }
     }
+
     const { rateLimit } = getState().users;
 
     return rejectWithValue(rateLimit);
