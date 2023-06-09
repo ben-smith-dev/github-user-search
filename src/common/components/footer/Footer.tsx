@@ -1,4 +1,4 @@
-import invertocatLogo from '../../assets/github-invertocat-logo.svg';
+import invertocatLogo from '../../assets/github-mark-white.svg';
 
 export const Footer: React.FC = () => {
   return (
