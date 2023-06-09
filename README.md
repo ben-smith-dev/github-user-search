@@ -4,7 +4,7 @@
 
 A simple web app built using React + Typescript to search for GitHub users and show some data about them. The most recent 10 searched users are also shown. This project was also made to be responsive and have a dark / light mode based on the users preferences.
 
-[website home page dark mode](/src/common/assets/preview%20images/github-user-search-searched-user-preview.png)
+![Website Preview with Searched User](/src/common/assets/preview%20images/github-user-search-searched-user-preview.png?raw=true 'DarkMode Preview with Searched User')
 
 ## Technologies + Frameworks Used
 
