@@ -28,7 +28,7 @@ git clone https://github.com/ben-smith-dev/github-user-search.git
 
 ### Navigate to the project directory
 ```
-cd github-user-search/
+cd github-user-search
 ```
 
 ### Install the required dependencies
