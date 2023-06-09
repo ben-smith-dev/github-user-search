@@ -4,6 +4,10 @@
 name: Deploy to Firebase Hosting on merge
 'on':
   push:
+    # https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#filter-pattern-cheat-sheet
+    paths-ignore:
+      - '**/LICENSE*'
+      - '**/README*'
     branches:
       - main
 jobs:
