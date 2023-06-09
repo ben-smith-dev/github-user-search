@@ -12,8 +12,6 @@ export const StoredUsersContainer: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
 
   const clearContainerHandler = () => {
-    console.log('clearing cached users');
-
     dispatch(clearUsers());
   };
 

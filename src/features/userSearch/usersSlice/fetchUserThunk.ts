@@ -106,8 +106,6 @@ export const onFetchUserPending: ActionHandler<PendingAction> = (
   state,
   action
 ) => {
-  console.log(`fetching user: ${action.meta.arg}`);
-
   return {
     ...state,
     searchResult: {
@@ -178,8 +176,6 @@ const onRejected: ActionHandler<RejectedAction> = (
   action
 ) => {
   const searchedUsername = action.meta.arg;
-
-  console.log(`Failed to fetch user ${action.meta.arg}`);
 
   // Update rate limit from rejected value.
   const rejectedValue =
