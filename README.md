@@ -1,5 +1,8 @@
 # github-user-search
 
+## [Live Web App](https://github-user-search-48922.web.app/)
+Live web app hosted using Firebase Hosting, and deployed using GitHub actions.
+
 ## Summary
 
 A simple web app built using React + Typescript to search for GitHub users and show some data about them. The most recent 10 searched users are also shown. This project was also made to be responsive and have a dark / light mode based on the users preferences.
@@ -18,11 +21,24 @@ A simple web app built using React + Typescript to search for GitHub users and s
 
 Note: This project requires [node.js](https://nodejs.org) to be installed.
 
+### Clone the project (or download the project files)
 ```
-% git clone https://github.com/ben-smith-dev/github-user-search.git
-% cd github-user-search
-% npm install
-% npm start
+git clone https://github.com/ben-smith-dev/github-user-search.git
+```
+
+### Navigate to the project directory
+```
+cd github-user-search
+```
+
+### Install the required dependencies
+```
+npm install
+```
+
+### Start the local development server
+```
+npm start
 ```
 
 ## Logos
